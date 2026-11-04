@@ -19,11 +19,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
       - name: Validate catalog and plugin structure
-        run: node --test tests/build-index.test.mjs tests/build-metadata.test.mjs tests/catalog-search.test.mjs tests/plugin-structure.test.mjs tests/site-messages.test.mjs
+        run: node --test tests/build-index.test.mjs tests/build-metadata.test.mjs tests/catalog-search.test.mjs tests/plugin-structure.test.mjs tests/plugin-version-policy.test.mjs tests/site-messages.test.mjs tests/site-install-instructions.test.mjs
+      - name: Check plugin versions against PR base
+        if: github.event_name == 'pull_request'
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: node scripts/check-plugin-versions.mjs "$PR_BASE_SHA"
 
   site-build:
     name: Site build

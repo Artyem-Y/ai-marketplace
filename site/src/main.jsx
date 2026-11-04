@@ -2,8 +2,28 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { catalogHash, parseLocation, searchCatalog } from './catalog.js';
 import { messages as m } from './messages.js';
+import { instructionsFor } from './install-instructions.js';
 import './style.css';
 import './navigation.css';
+
+function Installation({item}) {
+  const instructions = instructionsFor(item);
+  const [copyStatus, setCopyStatus] = useState('');
+  async function copy(command) {
+    try { await navigator.clipboard.writeText(command); setCopyStatus(m.copied); }
+    catch { setCopyStatus(m.copyFailed); }
+  }
+  if (!instructions) return <><h2>{m.installation}</h2><p>{m.notSpecified}</p></>;
+  return <section className="installation"><h2>{m.codexInstall}</h2>
+    {item.type !== 'plugin' && <p>{m.componentInstall(instructions.plugin)}</p>}
+    <p>{m.registerOnce}</p><ol>{instructions.commands.map((command, index) => <li key={command}>
+      <div className="install-command"><code>{command}</code><button type="button" aria-label={m.copyCommand(index + 1)} onClick={() => copy(command)}>{m.copy}</button></div>
+    </li>)}</ol><p aria-live="polite">{copyStatus}</p>
+    {instructions.commands.length > 2 && <p>{m.dependencyHelp}</p>}
+    {item.type === 'agent' && <p>{m.agentDiscovery}</p>}{item.type === 'skill' && <p>{m.skillDiscovery}</p>}
+    <p>{m.startSession}</p>
+  </section>;
+}
 
 function CommandPalette({ items, open, onClose, onSelect }) {
   const dialog = useRef(null);
@@ -88,7 +108,7 @@ function App() {
       <a href="https://github.com/Artyem-Y/ai-marketplace" target="_blank" rel="noreferrer">{m.github}</a>
     </header>
     <main id="main-content" tabIndex="-1">
-      {view.page === 'getting-started' ? <section className="detail"><div className="eyebrow">{m.guide}</div><h1>{m.gettingStarted}</h1><div className="panel"><h2>{m.register}</h2><p>{m.registerHelp}</p><h2>{m.installPlugins}</h2><p>{m.installHelp}</p><h2>{m.update}</h2><p>{m.updateHelp}</p><p>{m.commandsHelp} <a className="source-link" href="https://github.com/Artyem-Y/ai-marketplace/blob/main/docs/RELEASES.md">{m.releaseGuide}</a> {m.commandsHelpEnd}</p></div></section> : view.page === 'whats-new' ? <section className="detail"><div className="eyebrow">{m.releases}</div><h1>{m.whatsNew}</h1><div className="panel empty"><h2>{m.noReleases}</h2><p>{m.noReleasesHelp}</p></div></section> : view.selected && catalog.state === 'ready' ? selected ? <section className="detail"><button className="back" onClick={() => navigate({selected: null})}>{m.back}</button><div className="eyebrow">{m.types[selected.type]}</div><h1>{selected.name}</h1><p>{selected.description}</p><div className="panel"><h2>{m.about}</h2><p>{selected.body || m.noDescription}</p><h2>{m.source}</h2><code>{selected.path}</code>{selected.type === 'plugin' && <><h2>{m.components}</h2>{selected.children?.length ? <ul>{selected.children.map(id => { const child = catalog.items.find(item => item.id === id); return <li key={id}>{child ? <button className="related" onClick={() => navigate({selected:id})}>{m.types[child.type]}: {child.name}</button> : m.unavailable}</li>; })}</ul> : <p>{m.noComponents}</p>}<h2>{m.dependencies}</h2>{selected.dependencies?.length ? <ul>{selected.dependencies.map(name => { const dependency = catalog.items.find(item => item.id === `plugin:${name}`); return <li key={name}>{dependency ? <button className="related" onClick={() => navigate({selected:dependency.id})}>{name}</button> : m.dependencyUnavailable(name)}</li>; })}</ul> : <p>{m.none}</p>}<p>{m.codexDependency}</p></>}<h2>{m.compatibility}</h2><p>{m.notVerified}</p><h2>{m.installation}</h2><p>{m.notSpecified}</p></div></section> : <section className="detail panel"><h1>{m.notFound}</h1><p>{m.notFoundHelp}</p><button onClick={() => navigate({selected: null})}>{m.backButton}</button></section> : <>
+      {view.page === 'getting-started' ? <section className="detail"><div className="eyebrow">{m.guide}</div><h1>{m.gettingStarted}</h1><div className="panel"><h2>{m.register}</h2><p>{m.registerHelp}</p><h2>{m.installPlugins}</h2><p>{m.installHelp}</p><h2>{m.update}</h2><p>{m.updateHelp}</p><p>{m.commandsHelp} <a className="source-link" href="https://github.com/Artyem-Y/ai-marketplace/blob/main/docs/RELEASES.md">{m.releaseGuide}</a> {m.commandsHelpEnd}</p></div></section> : view.page === 'whats-new' ? <section className="detail"><div className="eyebrow">{m.releases}</div><h1>{m.whatsNew}</h1><div className="panel empty"><h2>{m.noReleases}</h2><p>{m.noReleasesHelp}</p></div></section> : view.selected && catalog.state === 'ready' ? selected ? <section className="detail"><button className="back" onClick={() => navigate({selected: null})}>{m.back}</button><div className="eyebrow">{m.types[selected.type]}</div><h1>{selected.name}</h1><p>{selected.description}</p><div className="panel"><h2>{m.about}</h2><p>{selected.body || m.noDescription}</p><h2>{m.source}</h2><code>{selected.path}</code>{selected.type === 'plugin' && <><h2>{m.components}</h2>{selected.children?.length ? <ul>{selected.children.map(id => { const child = catalog.items.find(item => item.id === id); return <li key={id}>{child ? <button className="related" onClick={() => navigate({selected:id})}>{m.types[child.type]}: {child.name}</button> : m.unavailable}</li>; })}</ul> : <p>{m.noComponents}</p>}<h2>{m.dependencies}</h2>{selected.dependencies?.length ? <ul>{selected.dependencies.map(name => { const dependency = catalog.items.find(item => item.id === `plugin:${name}`); return <li key={name}>{dependency ? <button className="related" onClick={() => navigate({selected:dependency.id})}>{name}</button> : m.dependencyUnavailable(name)}</li>; })}</ul> : <p>{m.none}</p>}<p>{m.codexDependency}</p></>}<h2>{m.compatibility}</h2><p>{m.notVerified}</p><Installation key={selected.id} item={selected} /></div></section> : <section className="detail panel"><h1>{m.notFound}</h1><p>{m.notFoundHelp}</p><button onClick={() => navigate({selected: null})}>{m.backButton}</button></section> : <>
         <section className="hero"><div className="eyebrow">{m.heroTag}</div><h1>{m.heroTitle1}<br />{m.heroTitle2}</h1><p>{m.heroHelp}</p><label className="search"><span aria-hidden="true">⌕</span><input ref={searchInput} value={view.query} onChange={event => navigate({query:event.target.value}, true)} placeholder={m.searchPlaceholder} aria-label={m.searchCatalog} /></label><p className="search-help">{m.searchHelp}</p></section>
         {catalog.state === 'ready' && catalog.items.length > 0 && !view.query && view.type === 'all' && <section className="stats" aria-label={m.overview}>{['plugin','skill','agent'].map(type => <button key={type} onClick={() => navigate({type})}><strong>{catalog.items.filter(item => item.type === type).length}</strong><span>{m.typePlural[type]}</span></button>)}</section>}
         <section className="catalog"><div className="heading"><div><div className="eyebrow">{m.collection}</div><h2>{m.explore}</h2></div><span aria-live="polite">{catalog.state === 'ready' ? m.resultCount(results.length) : catalog.state === 'loading' ? m.loadingResults : m.resultsUnavailable}</span></div>
