@@ -48,7 +48,9 @@ function frontmatter(text, file) {
   };
   const name = field('name'), description = field('description');
   if (!name || !description) throw new Error(`Missing name or description: ${file}`);
-  return { name, description, body: match[2] };
+  const tools = field('tools');
+  const model = field('model');
+  return { name, description, body: match[2], ...(tools ? {tools:tools.split(',').map(tool => tool.trim()).filter(Boolean)} : {}), ...(model ? {model} : {}) };
 }
 
 export async function buildIndex(root) {

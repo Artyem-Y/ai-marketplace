@@ -21,6 +21,8 @@ export const messages = {
   skillDiscovery: 'The skill is included in the plugin. Automatic skill activation has not been verified.',
   startSession: 'Start a new Codex session and verify the installed components.',
   copy: 'Copy', copyCommand: index => `Copy command ${index}`, copied: 'Copied.', copyFailed: 'Could not copy. Select the command and copy it manually.',
+  breadcrumb: 'Breadcrumb', partOf: 'Part of plugin', documentation: 'Documentation', viewSource: 'View source',
+  declaredTools: 'Declared tools', declaredToolsHelp: 'Declared in the agent file; actual access depends on the host.', details: 'Details', model: 'Model', identifier: 'ID', version: 'Version', sourceUnavailable: 'Source link unavailable for this build.',
   notFound: 'Artifact not found', notFoundHelp: 'The artifact is unavailable in this catalog snapshot.',
   heroTag: 'PLUGINS · SKILLS · AGENTS', heroTitle1: 'Find the right artifact', heroTitle2: 'for your workflow.', heroHelp: 'Explore reusable building blocks for your AI tools.',
   searchPlaceholder: 'Search by task, tool, or keyword…', searchCatalog: 'Search the catalog', searchHelp: 'Search names and instructions · Press / to focus', overview: 'Catalog overview',

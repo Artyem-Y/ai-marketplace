@@ -77,3 +77,12 @@ test('rejects symlinked supporting markdown', async (t) => {
   await symlink(join(root, 'plugins/example/skills/review/SKILL.md'), join(root, 'plugins/example/skills/review/example.md'));
   await assert.rejects(buildIndex(root), /symlink/i);
 });
+
+test('indexes declared agent tools and model without inferring permissions', async t => {
+  const root = await fixture(t);
+  await mkdir(join(root,'plugins/example/agents'));
+  await writeFile(join(root,'plugins/example/agents/reviewer.md'), '---\nname: reviewer\ndescription: Review changes\ntools: Read, Grep, Glob\nmodel: inherit\n---\nReview carefully.');
+  const agent = (await buildIndex(root)).items.find(item => item.type === 'agent');
+  assert.deepEqual(agent.tools,['Read','Grep','Glob']);
+  assert.equal(agent.model,'inherit');
+});

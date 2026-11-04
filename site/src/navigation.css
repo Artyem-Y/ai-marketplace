@@ -1,9 +1,37 @@
 header .theme { margin-left: 0; }
+.artifact-detail { max-width:1080px; padding-top:28px; }
+.breadcrumbs { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:28px; color:var(--muted); font:12px monospace; }
+.breadcrumbs button, .inline-link { border:0; background:none; color:var(--accent); padding:0; text-align:left; }
+.breadcrumbs span:last-child { color:var(--text); overflow-wrap:anywhere; }
+.artifact-meta { display:flex; align-items:center; flex-wrap:wrap; gap:10px; color:var(--muted); font-size:12px; }
+.artifact-badge { border-radius:5px; padding:4px 8px; background:#293850; color:#b1caff; font:600 11px monospace; text-transform:lowercase; }
+.artifact-badge.agent { background:#392a40; color:#e4b5ee; }
+.artifact-badge.skill { background:#1d3b34; color:#a9e4cc; }
+.artifact-detail h1 { margin:14px 0 10px; font-size:clamp(28px,4vw,38px); letter-spacing:-.03em; }
+.artifact-summary { max-width:700px; margin:0; }
+.artifact-detail .installation { margin:28px 0; max-width:900px; }
+.artifact-detail .installation h2 { font-size:14px; }
+.artifact-detail .installation p { color:var(--muted); line-height:1.55; }
+.detail-columns { border-top:1px solid var(--line); padding-top:25px; display:grid; grid-template-columns:minmax(0,3fr) minmax(190px,1fr); gap:32px; }
+.source-panel { border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--panel); min-width:0; }
+.source-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px; border-bottom:1px solid var(--line); color:var(--muted); font-size:12px; }
+.source-heading code, .detail-sidebar dd { overflow-wrap:anywhere; }
+.source-heading a { color:var(--accent); white-space:nowrap; }
+.source-content { padding:22px; }
+.source-content h2 { font-size:15px; }
+.source-content pre { white-space:pre-wrap; overflow-wrap:anywhere; color:var(--muted); font:14px/1.65 system-ui,sans-serif; }
+.detail-sidebar h2 { color:var(--muted); text-transform:uppercase; letter-spacing:.08em; font:600 11px monospace; margin:0 0 12px; }
+.detail-sidebar section { margin-bottom:28px; }
+.detail-sidebar p { color:var(--muted); font-size:12px; line-height:1.5; }
+.detail-sidebar dl { display:grid; grid-template-columns:auto minmax(0,1fr); gap:10px 14px; font:12px/1.5 monospace; }
+.detail-sidebar dt { color:var(--muted); }.detail-sidebar dd { margin:0; }
+.tool-tags { display:flex; flex-wrap:wrap; gap:6px; }.tool-tags span { padding:5px 8px; border:1px solid var(--line); border-radius:5px; font:12px monospace; }
+@media (max-width:700px) { .detail-columns { grid-template-columns:1fr; gap:24px; }.breadcrumbs button { min-height:44px; }.artifact-detail .installation { margin:22px 0; } }
 .installation ol { padding-left:24px; }
 .installation li { margin:10px 0; }
 .install-command { display:flex; align-items:center; gap:12px; padding:10px; border:1px solid var(--line); border-radius:8px; background:var(--bg); }
 .install-command code { flex:1; min-width:0; overflow-wrap:anywhere; }
-.panel .install-command button { flex-shrink:0; color:var(--text); text-transform:none; }
+.install-command button { flex-shrink:0; min-height:36px; padding:7px 14px; border:1px solid var(--line); border-radius:6px; background:var(--panel); color:var(--text); text-transform:none; }
 .skip-link { position:absolute; z-index:100; left:12px; top:8px; padding:12px; background:var(--panel); color:var(--text); border:2px solid var(--accent); border-radius:6px; transform:translateY(-150%); }
 .skip-link:focus { transform:translateY(0); }
 .search:focus-within { outline:2px solid var(--accent); outline-offset:3px; }
