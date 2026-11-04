@@ -1,1 +1,1 @@
-{"$schema":"https://agent-plugins.org/schemas/1.0.0/plugin.schema.json","name":"research-tools","version":"0.1.0","description":"Evidence-led research for project and external sources."}
+{"$schema":"https://agent-plugins.org/schemas/1.0.0/plugin.schema.json","name":"research-tools","version":"0.1.0","description":"Evidence-led research with source comparison, citations, and uncertainty reporting."}
