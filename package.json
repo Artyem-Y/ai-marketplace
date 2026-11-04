@@ -1,0 +1,10 @@
+{
+  "name": "@artyem-y/ai-marketplace-installer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": { "ai-marketplace": "./bin/ai-marketplace.mjs" },
+  "files": ["bin", "plugins", ".agents/plugins/marketplace.json"],
+  "engines": { "node": ">=20.19" },
+  "dependencies": { "@iarna/toml": "2.2.5" }
+}

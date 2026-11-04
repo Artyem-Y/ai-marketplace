@@ -9,6 +9,7 @@ test('plugin and its skill receive the same reviewed Codex installation commands
   assert.deepEqual(skill, plugin);
   assert.equal(plugin.commands[0], 'codex plugin marketplace add Artyem-Y/ai-marketplace --ref main');
   assert.equal(plugin.commands.at(-1), 'codex plugin add research-tools@ai-marketplace');
+  assert.deepEqual(plugin.projectCommands, ['npx --yes github:Artyem-Y/ai-marketplace add research-tools --project']);
 });
 
 test('SDD commands include each required plugin without claiming automatic dependencies', () => {

@@ -17,7 +17,9 @@ function Installation({item}) {
   if (!instructions) return <><h2>{m.installation}</h2><p>{m.notSpecified}</p></>;
   return <section className="installation"><h2>{m.codexInstall}</h2>
     {item.type !== 'plugin' && <p>{m.componentInstall(instructions.plugin)}</p>}
-    <p>{m.registerOnce}</p><ol>{instructions.commands.map((command, index) => <li key={command}>
+    <p>{m.projectInstallHelp}</p><ol>{instructions.projectCommands.map((command, index) => <li key={command}>
+      <div className="install-command"><code>{command}</code><button type="button" aria-label={m.copyProjectCommand(index + 1)} onClick={() => copy(command)}>{m.copy}</button></div>
+    </li>)}</ol><h2>{m.globalInstall}</h2><p>{m.registerOnce}</p><ol>{instructions.commands.map((command, index) => <li key={command}>
       <div className="install-command"><code>{command}</code><button type="button" aria-label={m.copyCommand(index + 1)} onClick={() => copy(command)}>{m.copy}</button></div>
     </li>)}</ol><p aria-live="polite">{copyStatus}</p>
     {instructions.commands.length > 2 && <p>{m.dependencyHelp}</p>}

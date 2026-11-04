@@ -24,8 +24,10 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
+      - name: Install installer dependencies
+        run: npm ci --ignore-scripts
       - name: Validate catalog and plugin structure
-        run: node --test tests/build-index.test.mjs tests/build-metadata.test.mjs tests/catalog-search.test.mjs tests/plugin-structure.test.mjs tests/plugin-version-policy.test.mjs tests/site-messages.test.mjs tests/site-install-instructions.test.mjs tests/site-source-link.test.mjs
+        run: node --test tests/build-index.test.mjs tests/build-metadata.test.mjs tests/catalog-search.test.mjs tests/plugin-structure.test.mjs tests/plugin-version-policy.test.mjs tests/site-messages.test.mjs tests/site-install-instructions.test.mjs tests/site-source-link.test.mjs tests/project-installer.test.mjs
       - name: Check plugin versions against PR base
         if: github.event_name == 'pull_request'
         env:

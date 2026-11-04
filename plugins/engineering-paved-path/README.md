@@ -4,6 +4,14 @@ Reusable, task-focused engineering guidance for target repositories.
 
 ## Install and use
 
+To copy this plugin's skills into a target Git project and configure its project marketplace:
+
+```sh
+npx --yes github:Artyem-Y/ai-marketplace add engineering-paved-path --project
+```
+
+See the [project installation guide](../../README.md#install-into-a-project) for runtime discovery limits and profile-level installation.
+
 Register this marketplace in Claude Code and install `engineering-paved-path@ai-marketplace`. Invoke `engineering-paved-path:architecture-boundaries` for an evidence-based review of project-specific architectural boundaries. `architecture-review` declares this plugin as a dependency.
 
 ## Contents and limitations

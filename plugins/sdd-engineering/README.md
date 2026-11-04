@@ -4,6 +4,14 @@ A draft specification-driven development workflow for a target repository.
 
 ## Install
 
+To configure this plugin and its dependencies in a target Git project:
+
+```sh
+npx --yes github:Artyem-Y/ai-marketplace add sdd-engineering --project
+```
+
+The installer copies skill and agent files; it does not establish automatic Codex subagent discovery or skill activation. See the [project installation guide](../../README.md#install-into-a-project).
+
 Register this marketplace in Claude Code and install `sdd-engineering@ai-marketplace`. Its declared dependencies are `engineering-paved-path`, `research-tools` and `architecture-review`. Dependency installation and invocation still require verification with the target Claude Code version.
 
 ## Workflow
