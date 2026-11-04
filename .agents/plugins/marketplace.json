@@ -1,7 +1,10 @@
 {
-    "name": "ai-marketplace",
-    "interface": {
-      "displayName": "AI Marketplace"
-    },
-    "plugins": []
-  }
+  "name": "ai-marketplace",
+  "interface": { "displayName": "AI Marketplace" },
+  "plugins": [
+    { "name": "engineering-paved-path", "source": { "source": "local", "path": "./plugins/engineering-paved-path" }, "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" }, "category": "Productivity" },
+    { "name": "research-tools", "source": { "source": "local", "path": "./plugins/research-tools" }, "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" }, "category": "Productivity" },
+    { "name": "architecture-review", "source": { "source": "local", "path": "./plugins/architecture-review" }, "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" }, "category": "Productivity" },
+    { "name": "sdd-engineering", "source": { "source": "local", "path": "./plugins/sdd-engineering" }, "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" }, "category": "Productivity" }
+  ]
+}

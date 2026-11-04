@@ -1,0 +1,4 @@
+node_modules/
+dist/
+public/search-index.json
+design-reference/

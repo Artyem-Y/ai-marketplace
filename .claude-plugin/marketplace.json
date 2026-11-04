@@ -1,0 +1,10 @@
+{
+  "name": "ai-marketplace",
+  "owner": { "name": "Artem Y" },
+  "plugins": [
+    { "name": "engineering-paved-path", "source": "./plugins/engineering-paved-path", "description": "Reusable engineering practices." },
+    { "name": "research-tools", "source": "./plugins/research-tools", "description": "Evidence-led research." },
+    { "name": "architecture-review", "source": "./plugins/architecture-review", "description": "Independent architecture review." },
+    { "name": "sdd-engineering", "source": "./plugins/sdd-engineering", "description": "Specification-driven engineering workflow." }
+  ]
+}
