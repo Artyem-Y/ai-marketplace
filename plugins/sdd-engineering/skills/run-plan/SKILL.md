@@ -1,23 +1,126 @@
 ---
 name: run-plan
-description: Coordinate an approved implementation plan with independent review and verification.
+description: Execute an approved implementation plan with DAG-safe implementers, preflight and completion verification, parallel independent reviews, and a bounded fix loop. Use only after spec authoring and planning are complete.
 ---
 
-## Preconditions
+# Run Plan
 
-Use only after the specification and plan are approved. Read the plan, its specification and target-repository instructions. Identify the intended change, requirements, scope, verification commands, existing worktree changes and authorized execution mode. If required information or permissions are absent, report `BLOCKED`; do not invent requirements or overwrite unrelated changes. Ask for clarification when the conflict prevents further work, while continuing independent authorized steps where possible.
+Run an already-approved implementation plan to reviewed code. You are the main
+session coordinator: use specialised agents when permitted and available, and retain concise reports. Otherwise perform authorized work and label reviews as not independent.
 
-## Execution
+Invoke with:
 
-1. Before implementation, check that plan steps are traceable to requirements and that verification can establish each result. Record any unverified preconditions.
-2. Implement in dependency order. Use relevant engineering guidance only when it applies. Delegate bounded tasks only if the user and host permit delegation. Provide each worker the exact scope, constraints, target instructions and expected handoff.
-3. Run focused checks for each change. Record commands and actual outcomes. Stop at a failed prerequisite; do not weaken or silently skip a check. A worker reports `COMPLETE`, `PARTIAL` or `BLOCKED`, changed files, checks and unresolved issues.
-4. After implementation, request independent architecture review and conditional security review when the host supports and permits them. Supply the changed files, intended behavior and revision or diff. Reviewers report findings, evidence and uncovered scope; a read-only instruction alone is not an enforced permission boundary.
-5. Independently verify each requirement against actual evidence. Record `MET`, `NOT MET` or `BLOCKED`, plus command output or a precise source locator. Unexecuted checks and missing traces cannot establish a pass.
-6. Resolve review findings within the approved scope and rerun affected checks. Stop and return unresolved issues if fixing them requires new authorization, the same issue repeats, or verification cannot be completed. Do not hide unresolved critical findings behind a success label.
+```text
+/run-plan plan:<path> [mode:multi|single] [max-fix:<n>] [free-text constraints]
+```
 
-If separate agents are unavailable or forbidden, do the authorized work that remains possible and explicitly label review and verification as not independent. Do not claim a separate reviewer ran. Never publish, merge, push or change external configuration implicitly.
+## Inputs and stop conditions
 
-## Handoff
+- `plan:<path>` is required. Read it; if it is missing, unreadable, unapproved,
+  or lacks task ownership, stop and ask for the exact plan path or correction.
+- `mode:multi` or `mode:single` overrides the plan's execution mode. Otherwise
+  use the recorded mode.
+- `max-fix:<n>` limits remediation iterations; default to `3`.
+- Free text is a run constraint, not a change to requirements. If it conflicts
+  with the plan, stop for a human decision.
 
-Return `COMPLETE`, `PARTIAL` or `BLOCKED`, the specification and plan paths, changed files, verification commands and outcomes, review findings, unresolved risks and any unverified requirements. `COMPLETE` requires every required acceptance criterion and gate to have evidence. The separate `workflow-retro` skill runs only when explicitly requested.
+This skill starts from an approved plan. Do not invoke `spec-creator` or
+`implementation-planner`, and do not reinterpret supplied designs or feature
+requirements. Do not invoke `test-writer`; each implementer owns the tests
+assigned to its task.
+
+Never push, merge, or open a pull request without authorization, or silently continue past a blocking task. Keep the plan path, task cards, changed-file manifest, and short agent
+reports in coordinator context; do not paste full diffs or transcripts.
+
+## Execute the plan
+
+1. Read the plan and extract each task ID, action, module, selected skills,
+   owned paths, verification owner, focused check, integration gate,
+   dependencies, and acceptance criteria. State the selected mode, task count,
+   and fix limit in one line.
+2. Run `plan-verifier` in `preflight` mode. If any requirement is `blocked`,
+   stop before dispatching code work.
+3. In multi-agent mode, dispatch all ready tasks whose dependencies are complete
+   and whose owned paths do not overlap, one `implementer` per task. Give each
+   task card and the other concurrent tasks' owned paths. Wait for the batch,
+   collect short results, then form the next ready set. In single-agent mode,
+   dispatch tasks in dependency order.
+4. If a task reports a failing or blocked focused check that it cannot resolve
+   in scope, stop dependent work and surface the blocker. Do not convert it
+   into an unrelated retry.
+5. After dependent work is combined, dispatch the plan-designated integration
+   owner to run package-wide gates and `pr-self-review`. Record the fresh
+   receipts in the Verification Matrix.
+6. Run `plan-verifier` in `completion` mode. If it identifies a functional
+   requirement gap, put that gap into the remediation backlog before review.
+7. After completion verification, dispatch independent reviewers concurrently:
+   `architecture-reviewer` always, and `security-reviewer` only when the plan
+   or changed paths trigger its scope under the handoff protocol. Pass each a
+   compact Review Packet with the completion report; reviewers inspect the
+   worktree instead of receiving a pasted full diff.
+
+## Bounded remediation loop
+
+Build a backlog from confirmed completion gaps, `critical`/`high` architecture
+or security findings, and any explicitly user-approved lower-severity finding.
+Report other findings without silently expanding scope.
+
+For iteration `1..max-fix`:
+
+1. Group backlog items into non-overlapping owned-path fix tasks and dispatch
+   `implementer` agents with the exact finding, `path:line` evidence, required
+   focused check, and scope boundary.
+2. Run the focused checks for those fixes. Re-run the integration gate only if
+   its receipt is no longer valid for the changed paths or dependencies.
+3. Re-run the affected independent reviewers concurrently on the changed files.
+   Re-run completion verification for every requirement whose evidence changed.
+4. Stop successfully when no actionable backlog remains. Stop and ask a human
+   if the same backlog makes no progress or the fix limit is reached.
+
+## Documentation handoff
+
+After the remediation loop, dispatch `doc-writer` with the approved plan,
+implementation result, changed-file manifest, and fresh verification matrix.
+For every changed package, it
+must create or update the package-local durable documentation required by the
+plan, or report the evidence-backed test-only/refactor exception. Run the
+documentation link and rendering checks before final reporting.
+
+## Final report
+
+Return only concise evidence:
+
+```md
+## Run Plan — <feature>
+
+- **Plan:** `<path>` — mode: <multi|single>
+- **Implemented:** <task IDs and one-line result>
+- **Verification:** <focused and integration receipts, or limits>
+- **Test Writer:** not invoked by design
+- **Documentation:** <files changed or explicit package exceptions>
+
+### Review gate
+- plan-verifier preflight: <ready|blocked>
+- plan-verifier completion: <tested N/M; gaps or none>
+- architecture-reviewer: <PASS|FAIL; critical/high counts>
+- security-reviewer: <not triggered|PASS|FAIL; critical/high counts>
+
+### Fix loop
+- iterations run: <n>/<max-fix>
+- resolved: <finding IDs or none>
+- **remaining (needs human):** <items or none>
+
+### Next step
+State whether any external action was explicitly authorized and performed.
+```
+
+## When you cannot proceed
+
+Stop and state the exact blocker when the plan is missing, unreadable,
+unapproved, or lacks task ownership; preflight is blocked; an implementer is
+blocked on a decision only a human can make; a required focused check cannot be
+resolved in scope; the remediation loop makes no progress; or `max-fix` is
+reached with actionable findings remaining. A clear blocked result is valid; a
+partial run presented as complete is not.
+
+If a required agent, skill, tool, or delegation permission is unavailable, do not claim it ran. Continue independent authorized work where possible and report the missing independent review.

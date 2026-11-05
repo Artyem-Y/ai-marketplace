@@ -6,7 +6,7 @@ Each plugin needs an owner, manifest, README, changelog, applicable test cases a
 
 ## Current provenance
 
-The SDD and agent instructions are original, abbreviated adaptations informed by the local DevDigest checkout at commit `6075e27230c7b7eea49320957dfde5e47b5eba68`. Engineering skills were copied primarily from that local checkout and generalized; see `plugins/engineering-paved-path/SOURCES.md` for exact sources, adaptations and unresolved redistribution terms. The public reference marketplace at commit `f6caadf38b1ad3e93a920e2c5ff34f4c1ed7fb13` is secondary. This is not a complete transfer. Review each future imported skill's upstream license, supporting resources and project assumptions before copying it.
+The SDD and agent instructions are adapted from the local DevDigest checkout; project-specific paths and host-specific behavior are generalized. The original baseline was commit `6075e27230c7b7eea49320957dfde5e47b5eba68`; consult `docs/IMPORT-PROVENANCE.md` for the current import and verification limits. Engineering skills were copied primarily from that local checkout and generalized; see `plugins/engineering-paved-path/SOURCES.md` for exact sources, adaptations and unresolved redistribution terms. The public reference marketplace at commit `f6caadf38b1ad3e93a920e2c5ff34f4c1ed7fb13` is secondary. This is not a complete transfer. Review each future imported skill's upstream license, supporting resources and project assumptions before copying it.
 
 ## Validation
 

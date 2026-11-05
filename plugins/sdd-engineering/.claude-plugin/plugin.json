@@ -1,1 +1,1 @@
-{"name":"sdd-engineering","version":"0.1.0","description":"Specification-driven engineering workflow.","dependencies":["engineering-paved-path","research-tools","architecture-review"]}
+{"name":"sdd-engineering","version":"0.1.1","description":"Specification-driven engineering workflow.","dependencies":["engineering-paved-path","research-tools","architecture-review"]}

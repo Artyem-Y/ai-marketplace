@@ -97,3 +97,29 @@ test('one SDD installation configures its full declared dependency graph', t => 
   const config=readFileSync(join(dir,'.codex/config.toml'),'utf8');
   for (const plugin of market.plugins) assert.ok(config.includes(`[plugins."${plugin.name}@ai-project"]`));
 });
+
+test('SDD installation preserves complete role instructions and supporting resources', t => {
+  const dir=project(t);
+  const result=spawnSync(process.execPath,[cli,'add','sdd-engineering','--project'],{cwd:dir,encoding:'utf8'});
+  assert.equal(result.status,0,result.stderr);
+  const files=[
+    'sdd-engineering/agents/spec-creator.md',
+    'sdd-engineering/agents/implementation-planner.md',
+    'sdd-engineering/agents/implementer.md',
+    'sdd-engineering/agents/plan-verifier.md',
+    'sdd-engineering/references/handoff-protocol.md',
+    'sdd-engineering/skills/run-plan/SKILL.md',
+    'sdd-engineering/skills/workflow-retro/SKILL.md',
+    'sdd-engineering/skills/workflow-retro/scripts/analyze_journals.py',
+    'sdd-engineering/skills/sdd-spec-writing/SKILL.md',
+    'architecture-review/agents/architecture-reviewer.md',
+    'architecture-review/references/handoff-protocol.md',
+    'research-tools/agents/researcher.md',
+    'research-tools/references/handoff-protocol.md',
+  ];
+  for (const file of files) {
+    const source=fileURLToPath(new URL(`../plugins/${file}`,import.meta.url));
+    const installed=join(dir,'.agents/plugins/vendor/ai-marketplace',file);
+    assert.deepEqual(readFileSync(installed),readFileSync(source),file);
+  }
+});

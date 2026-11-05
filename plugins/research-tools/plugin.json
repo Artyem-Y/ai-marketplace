@@ -1,1 +1,1 @@
-{"$schema":"https://agent-plugins.org/schemas/1.0.0/plugin.schema.json","name":"research-tools","version":"0.1.1","description":"Evidence-led research with source comparison, citations, and uncertainty reporting."}
+{"$schema":"https://agent-plugins.org/schemas/1.0.0/plugin.schema.json","name":"research-tools","version":"0.1.2","description":"Evidence-led research with source comparison, citations, and uncertainty reporting."}
