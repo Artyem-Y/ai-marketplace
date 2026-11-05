@@ -25,7 +25,7 @@ The workflow reads the target repository's instructions and checks. Research is 
 
 ## Codex compatibility
 
-The portable `plugin.json` packages skills for the four SDD roles as well as `run-plan` and `workflow-retro`. The role skills reference their accompanying instruction files; they do not automatically create separate agents or enforce read-only access. The `agents/*.md` files use Claude agent conventions; their automatic discovery in Codex is not established.
+The portable `plugin.json` packages skills for the four SDD roles as well as `run-plan`, `workflow-retro`, and `sdd-spec-writing`. Each role skill contains its full role guidance and handoff reference; they do not automatically create separate agents or enforce read-only access. The `agents/*.md` files use Claude agent conventions; their automatic discovery in Codex is not established.
 
 Codex CLI 0.153.4 installed `sdd-engineering` in an isolated local profile, but did not automatically install the three Claude manifest dependencies. Install each separately. Cached files were inspected; model activation, delegation and the end-to-end workflow have not been verified. When delegation is unavailable, `run-plan` must disclose that review is not independent.
 
