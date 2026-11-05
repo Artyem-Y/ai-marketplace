@@ -61,3 +61,20 @@ test('portable engineering skills include their referenced supporting documents'
     assert.doesNotMatch(contents, /\/Users\/[^\s/:]+\/|\/home\/[^\s/:]+\//, file);
   }
 });
+
+test('role skills carry the complete agent guidance and handoff protocol', async () => {
+  const roles = {
+    'architecture-review': ['architecture-reviewer'],
+    'research-tools': ['researcher'],
+    'sdd-engineering': ['spec-creator', 'implementation-planner', 'implementer', 'plan-verifier'],
+  };
+  for (const [plugin,names] of Object.entries(roles)) for (const name of names) {
+    const agent = await text(`plugins/${plugin}/agents/${name}.md`);
+    const skill = await text(`plugins/${plugin}/skills/${name}/SKILL.md`);
+    const body = agent.split('---').slice(2).join('---').trim()
+      .replace('`../references/handoff-protocol.md` relative to this agent', '`references/handoff-protocol.md` relative to this skill')
+      .replace('(../references/handoff-protocol.md)', '(references/handoff-protocol.md)');
+    assert.ok(skill.includes(body), `${plugin}/${name} must include its complete role guidance`);
+    assert.equal(await text(`plugins/${plugin}/skills/${name}/references/handoff-protocol.md`), await text(`plugins/${plugin}/references/handoff-protocol.md`));
+  }
+});

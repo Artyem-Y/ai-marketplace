@@ -20,7 +20,8 @@ test('Codex installs local plugins independently into an isolated profile', asyn
   assert.equal(installed.name, 'sdd-engineering');
   assert.match(await readFile(join(installed.installedPath, 'skills/run-plan/SKILL.md'), 'utf8'), /approved/i);
   for (const role of ['spec-creator', 'implementation-planner', 'implementer', 'plan-verifier']) {
-    assert.match(await readFile(join(installed.installedPath, `skills/${role}/SKILL.md`), 'utf8'), new RegExp(`agents/${role}\\.md`));
+    assert.equal(await readFile(join(installed.installedPath, `skills/${role}/SKILL.md`), 'utf8'), await readFile(join(root, `plugins/sdd-engineering/skills/${role}/SKILL.md`), 'utf8'));
+    assert.ok((await readFile(join(installed.installedPath, `skills/${role}/references/handoff-protocol.md`), 'utf8')).length > 100);
     assert.match(await readFile(join(installed.installedPath, `agents/${role}.md`), 'utf8'), /^---/);
   }
   const firstList = await codex('plugin', 'list', '--json');
